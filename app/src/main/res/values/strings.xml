@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg">输入文字即可转换为拼音</string>
+    <string name="app_name">pinyin4j_sample</string>
+    <string name="nice">好</string>
+</resources>

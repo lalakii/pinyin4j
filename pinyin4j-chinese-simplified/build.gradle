@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+apply from: "../publish.gradle"
+android {
+    namespace "net.sourceforge.pinyin4j"
+    compileSdk compile_sdk_version
+    defaultConfig {
+       // minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+    }
+    compileOptions {
+        targetCompatibility java_version
+        sourceCompatibility java_version
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            isDefault true
+            debuggable = true
+        }
+    }
+}
+ext {
+    artifactId = "pinyin4j-chinese-simplified"
+    projectUrl = "http://sourceforge.net/projects/pinyin4j"
+    projectLicense = "GNU General Public License, version 2"
+    projectLicenseUrl = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.zh-cn.html"
+}
