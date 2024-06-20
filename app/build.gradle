@@ -1,0 +1,52 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+android {
+    namespace 'cn.lalaki.demo19999'
+    compileSdk 34
+    defaultConfig {
+        versionCode = 2
+        def verPath = Paths.get(".ver")
+        def verFile = Files.exists(verPath)
+        def ver = "0"
+        if (!verFile) {
+            Files.write(verPath, "1".getBytes())
+        } else {
+            ver = Files.readAllLines(verPath).first()
+            def newVer = ver.toInteger()
+            Files.write(verPath, (newVer + 1).toString().getBytes())
+        }
+        versionName ver + ".0.0"
+        applicationId 'cn.lalaki.demo19999'
+        minSdk 24
+    }
+    buildTypes {
+        release {
+            isDefault true
+            minifyEnabled true
+            debuggable false
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+    kotlinOptions {
+        jvmTarget = "21"
+    }
+}
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    //implementation 'cn.lalaki:pinyin4j-chinese-simplified:1.0.7'
+    implementation(project(":pinyin4j-chinese-simplified"))
+}
+tasks.configureEach {
+    if (it.name.toLowerCase().contains("aarmetadata")) it.enabled = false
+}

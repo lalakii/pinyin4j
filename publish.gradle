@@ -1,0 +1,78 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                if (publishToLocal) {
+                    url = "D:\\repo\\"
+                } else {
+                    url = System.getenv("MAVEN_PUBLISH_URL")
+                    credentials {
+                        username = System.getenv("MAVEN_USER_NAME")
+                        password = System.getenv("MAVEN_PUBLISH_PASSWORD")
+                    }
+                }
+            }
+        }
+        publications {
+            release(MavenPublication) {
+                artifact(tasks.named("bundleReleaseAar"))
+                def finalUrl = "https://github.com/lalakii/pinyin4j"
+                pom {
+                    name = artifactId
+                    artifactId = artifactId
+                    groupId = "cn.lalaki"
+                    version = release_version
+                    description = artifactId + ' for Android, 仅支持汉字转换简体中文拼音的精简版，体积超小。 forked from: ' + projectUrl
+                    url = finalUrl
+                    licenses {
+                        license {
+                            name = projectLicense
+                            url = projectLicenseUrl
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = 'lalakii'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:' + finalUrl + '.git'
+                        url = finalUrl
+                    }
+                    organization {
+                        name = "lalaki.cn"
+                        url = finalUrl
+                    }
+                }
+            }
+        }
+    }
+    signing {
+        useGpgCmd()
+        sign publishing.publications.release
+    }
+}
+tasks.configureEach {
+    def taskName = it.name.toLowerCase()
+    if (taskName.contains("aarmetadata") || taskName.contains("debug") || it instanceof Javadoc)
+        it.enabled = false
+}
+tasks.register('signMyAar') {
+    signing {
+        useGpgCmd()
+        def dir = "D:\\repo\\cn\\lalaki\\pinyin4j-chinese-simplified\\1.0.7\\"
+        sign file(dir + "pinyin4j-chinese-simplified-1.0.7.pom")
+        sign file(dir + "pinyin4j-chinese-simplified-1.0.7.aar")
+    }
+}
+ext {
+    publishToLocal = true
+    groupId = "cn.lalaki"
+    java_version = JavaVersion.VERSION_17
+    target_sdk_version = 34
+    compile_sdk_version = 34
+    min_sdk_version = 1
+    release_version = "1.0.7"
+}

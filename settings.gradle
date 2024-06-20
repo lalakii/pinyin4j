@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url 'http://127.0.0.1'
+        }
+    }
+}
+include ':pinyin4j-chinese-simplified', ':app'
